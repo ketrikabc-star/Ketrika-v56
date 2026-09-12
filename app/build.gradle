@@ -1,10 +1,28 @@
-plugins { id 'com.android.application'; id 'org.jetbrains.kotlin.android' }
-android {
-    namespace 'com.ketrika.app56'
-    compileSdk 34
-    defaultConfig { applicationId "com.ketrika.app56"; minSdk 21; targetSdk 34; versionCode 56; versionName "56.0" }
-    buildTypes { release { minifyEnabled false } debug { minifyEnabled false } }
-    compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
-    kotlinOptions { jvmTarget = '17' }
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
 }
-dependencies { implementation 'androidx.core:core-ktx:1.12.0'; implementation 'androidx.appcompat:appcompat:1.6.1' }
+
+android {
+    namespace 'com.ketrika.v56'
+    compileSdk 34
+    defaultConfig {
+        applicationId "com.ketrika.v56"
+        minSdk 21
+        targetSdk 34
+        versionCode 56
+        versionName "56.0"
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+}
+
+dependencies {
+    implementation 'androidx.core:core-ktx:1.12.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+}

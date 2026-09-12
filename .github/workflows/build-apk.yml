@@ -11,10 +11,8 @@ jobs:
           distribution: 'temurin'
       - uses: android-actions/setup-android@v3
       - uses: gradle/actions/setup-gradle@v3
-      - name: Build APK
-        run: gradle assembleDebug --stacktrace
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
+      - run: gradle assembleDebug --stacktrace
+      - uses: actions/upload-artifact@v4
         with:
           name: Ketrika-v56-APK
           path: "**/build/outputs/apk/debug/*.apk"

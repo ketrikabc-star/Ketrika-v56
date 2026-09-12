@@ -13,6 +13,31 @@ jobs:
       - uses: gradle/actions/setup-gradle@v3
         with:
           gradle-version: 8.5
+      - name: Fix project structure
+        run: |
+          mkdir -p app/src/main/java/com/ketrika/v56
+          cat > app/src/main/java/com/ketrika/v56/MainActivity.kt << 'EOF'
+          package com.ketrika.v56
+          import android.os.Bundle
+          import androidx.appcompat.app.AppCompatActivity
+          class MainActivity : AppCompatActivity() {
+            override fun onCreate(savedInstanceState: Bundle?) { super.onCreate(savedInstanceState) }
+          }
+          EOF
+          cat > app/src/main/AndroidManifest.xml << 'EOF'
+          <?xml version="1.0" encoding="utf-8"?>
+          <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+            <application android:label="Ketrika v56">
+              <activity android:name=".MainActivity" android:exported="true">
+                <intent-filter>
+                  <action android:name="android.intent.action.MAIN"/>
+                  <category android:name="android.intent.category.LAUNCHER"/>
+                </intent-filter>
+              </activity>
+            </application>
+          </manifest>
+          EOF
+          cat app/build.gradle
       - name: Build APK
         run: gradle assembleDebug --stacktrace
       - name: Upload APK

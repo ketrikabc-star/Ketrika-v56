@@ -1,8 +1,5 @@
 name: Build APK
-on:
-  push:
-    branches: [ main ]
-  workflow_dispatch:
+on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -15,13 +12,15 @@ jobs:
           distribution: 'temurin'
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
-        with:
-          gradle-version: 8.5
-      - name: Build Debug Adebug      run: gradle :app:assembleDebug --stacktrace
+      - name: Make gradlew executable
+        run: chmod +x./gradlew || echo "no wrapper"
+      - name: Build with Gradle
+        run: |
+          if [ -f "./gradlew" ]; then./gradlew assembleDebug; else
+          cd app && gradle assembleDebug ||../gradlew assembleDebug
+          fi
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: Ketrika-v56-APK
-          path: app/build/outputs/apk/debug/*.aAPKkk
+          path: app/build/outputs/apk/debug/*.apk

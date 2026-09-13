@@ -12,20 +12,19 @@ jobs:
       - uses: android-actions/setup-android@v3
       - name: Fix Project
         run: |
-          rm -rf app/src/main/Androidmanifest.xml app/build.gradle
+          rm -rf app/build.gradle build.gradle settings.gradle
+          rm -rf app/src/main/Androidmanifest.xml
           rm -f app/src/main/java/com/ketrika/v56/MainActivity.kt
           mkdir -p app/src/main/java/com/ketrika/v56
-          echo "include ':app'" > settings.gradle
+          printf "pluginManagement { repositories { google(); gradlePluginPortal(); mavenCentral() } }\ndependencyResolutionManagement { repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)\nrepositories { google(); mavenCentral() } }\ninclude ':app'\n" > settings.gradle
           echo "android.useAndroidX=true" > gradle.properties
           echo "" > build.gradle
+          echo "plugins { id 'com.android.application' version '8.2.2' apply false }" > build.gradle
           echo "plugins { id 'com.android.application' }" > app/build.gradle
           echo "android { namespace 'com.ketrika.v56'" >> app/build.gradle
           echo " compileSdk 34" >> app/build.gradle
-          echo " defaultConfig { applicationId 'com.ketrika.v56'" >> app/build.gradle
-          echo " minSdk 21" >> app/build.gradle
-          echo " targetSdk 34" >> app/build.gradle
-          echo " versionCode 56" >> app/build.gradle
-          echo " versionName '56.0' } }" >> app/build.gradle
+          echo " defaultConfig { applicationId 'com.ketrika.v56' minSdk 21 targetSdk 34 versionCode 56 versionName '56.0' }" >> app/build.gradle
+          echo " compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 } }" >> app/build.gradle
           echo "dependencies { implementation 'androidx.appcompat:appcompat:1.6.1' }" >> app/build.gradle
           echo '<?xml version="1.0" encoding="utf-8"?>' > app/src/main/AndroidManifest.xml
           echo '<manifest xmlns:android="http://schemas.android.com/apk/res/android">' >> app/src/main/AndroidManifest.xml
@@ -42,7 +41,7 @@ jobs:
           echo ' @Override protected void onCreate(Bundle b){' >> app/src/main/java/com/ketrika/v56/MainActivity.java
           echo ' super.onCreate(b);' >> app/src/main/java/com/ketrika/v56/MainActivity.java
           echo ' TextView tv=new TextView(this);' >> app/src/main/java/com/ketrika/v56/MainActivity.java
-          echo ' tv.setText("KETRIKA v56 - MAITSO SUCCESS");' >> app/src/main/java/com/ketrika/v56/MainActivity.java
+          echo ' tv.setText("KETRIKA v56 - MAITSO");' >> app/src/main/java/com/ketrika/v56/MainActivity.java
           echo ' tv.setTextSize(28);' >> app/src/main/java/com/ketrika/v56/MainActivity.java
           echo ' tv.setGravity(Gravity.CENTER);' >> app/src/main/java/com/ketrika/v56/MainActivity.java
           echo ' setContentView(tv);' >> app/src/main/java/com/ketrika/v56/MainActivity.java

@@ -12,15 +12,42 @@ jobs:
       - uses: android-actions/setup-android@v3
       - name: Fix Project
         run: |
-          rm -rf app/src/main/Androidmanifest.xml app/build .gradle
+          rm -rf app/src/main/Androidmanifest.xml app/build.gradle
           rm -f app/src/main/java/com/ketrika/v56/MainActivity.kt
           mkdir -p app/src/main/java/com/ketrika/v56
           echo "include ':app'" > settings.gradle
           echo "android.useAndroidX=true" > gradle.properties
           echo "" > build.gradle
-          printf "plugins { id 'com.android.application' }\nandroid { namespace 'com.ketrika.v56'\n compileSdk 34\n defaultConfig { applicationId \"com.ketrika.v56\"\n minSdk 21\n targetSdk 34\n versionCode 56\n versionName \"56.0\" }\n compileOptions { sourceCompatibility JavaVersion.VERSION_17\n targetCompatibility JavaVersion.VERSION_17 } }\ndependencies { implementation 'androidx.appcompat:appcompat:1.6.1' }\n" > app/build.gradle
-          printf "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\">\n<application android:label=\"Ketrika v56\">\n<activity android:name=\".MainActivity\" android:exported=\"true\" android:theme=\"@android:style/Theme.Light\">\n<intent-filter><action android:name=\"android.intent.action.MAIN\"/><category android:name=\"android.intent.category.LAUNCHER\"/></intent-filter>\n</activity>\n</application>\n</manifest>\n" > app/src/main/AndroidManifest.xml
-          printf "package com.ketrika.v56;\nimport android.app.Activity;\nimport android.os.Bundle;\nimport android.widget.TextView;\nimport android.view.Gravity;\npublic class MainActivity extends Activity { @Override protected void onCreate(Bundle b){ super.onCreate(b); TextView tv=new TextView(this); tv.setText(\"KETRIKA v56\\nMAITSO! SUCCESS!\\nMandeha tsara!\"); tv.setTextSize(24); tv.setGravity(Gravity.CENTER); tv.setPadding(50,300,50,50); setContentView(tv); } }\n" > app/src/main/java/com/ketrika/v56/MainActivity.java
+          echo "plugins { id 'com.android.application' }" > app/build.gradle
+          echo "android { namespace 'com.ketrika.v56'" >> app/build.gradle
+          echo " compileSdk 34" >> app/build.gradle
+          echo " defaultConfig { applicationId 'com.ketrika.v56'" >> app/build.gradle
+          echo " minSdk 21" >> app/build.gradle
+          echo " targetSdk 34" >> app/build.gradle
+          echo " versionCode 56" >> app/build.gradle
+          echo " versionName '56.0' } }" >> app/build.gradle
+          echo "dependencies { implementation 'androidx.appcompat:appcompat:1.6.1' }" >> app/build.gradle
+          echo '<?xml version="1.0" encoding="utf-8"?>' > app/src/main/AndroidManifest.xml
+          echo '<manifest xmlns:android="http://schemas.android.com/apk/res/android">' >> app/src/main/AndroidManifest.xml
+          echo '<application android:label="Ketrika v56">' >> app/src/main/AndroidManifest.xml
+          echo '<activity android:name=".MainActivity" android:exported="true" android:theme="@android:style/Theme.Light">' >> app/src/main/AndroidManifest.xml
+          echo '<intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter>' >> app/src/main/AndroidManifest.xml
+          echo '</activity></application></manifest>' >> app/src/main/AndroidManifest.xml
+          echo 'package com.ketrika.v56;' > app/src/main/java/com/ketrika/v56/MainActivity.java
+          echo 'import android.app.Activity;' >> app/src/main/java/com/ketrika/v56/MainActivity.java
+          echo 'import android.os.Bundle;' >> app/src/main/java/com/ketrika/v56/MainActivity.java
+          echo 'import android.widget.TextView;' >> app/src/main/java/com/ketrika/v56/MainActivity.java
+          echo 'import android.view.Gravity;' >> app/src/main/java/com/ketrika/v56/MainActivity.java
+          echo 'public class MainActivity extends Activity {' >> app/src/main/java/com/ketrika/v56/MainActivity.java
+          echo ' @Override protected void onCreate(Bundle b){' >> app/src/main/java/com/ketrika/v56/MainActivity.java
+          echo ' super.onCreate(b);' >> app/src/main/java/com/ketrika/v56/MainActivity.java
+          echo ' TextView tv=new TextView(this);' >> app/src/main/java/com/ketrika/v56/MainActivity.java
+          echo ' tv.setText("KETRIKA v56 - MAITSO SUCCESS");' >> app/src/main/java/com/ketrika/v56/MainActivity.java
+          echo ' tv.setTextSize(28);' >> app/src/main/java/com/ketrika/v56/MainActivity.java
+          echo ' tv.setGravity(Gravity.CENTER);' >> app/src/main/java/com/ketrika/v56/MainActivity.java
+          echo ' setContentView(tv);' >> app/src/main/java/com/ketrika/v56/MainActivity.java
+          echo ' }' >> app/src/main/java/com/ketrika/v56/MainActivity.java
+          echo '}' >> app/src/main/java/com/ketrika/v56/MainActivity.java
       - uses: gradle/actions/setup-gradle@v3
         with:
           gradle-version: 8.5

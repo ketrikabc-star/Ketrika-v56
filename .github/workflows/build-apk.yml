@@ -16,7 +16,7 @@ jobs:
           rm -f app/src/main/java/com/ketrika/v56/MainActivity.kt
           rm -f app/build.gradle build.gradle settings.gradle gradle.properties
           mkdir -p app/src/main/java/com/ketrika/v56
-          echo "include ':app'" > settings.gradle
+          echo "include:app'" > settings.gradle
           echo "android.useAndroidX=true" > gradle.properties
           cat > app/build.gradle <<'ENDOFFILE'
           plugins { id 'com.android.application' }

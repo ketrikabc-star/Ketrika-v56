@@ -10,18 +10,15 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
       - uses: android-actions/setup-android@v3
-      - uses: gradle/actions/setup-gradle@v3
-        with:
-          gradle-version: 8.5
-      - name: Fix Project
+      - name: Fix
         run: |
-          rm -rf app/src/main/Androidmanifest.xml
+          rm -rf app/src/main/Androidmanifest.xml app/src/main/AndroidManifest.xml
           rm -f app/src/main/java/com/ketrika/v56/MainActivity.kt
+          rm -f app/build.gradle build.gradle settings.gradle gradle.properties
           mkdir -p app/src/main/java/com/ketrika/v56
           echo "include ':app'" > settings.gradle
           echo "android.useAndroidX=true" > gradle.properties
-          echo "" > build.gradle
-          cat > app/build.gradle <<'EOF'
+          cat > app/build.gradle <<'ENDOFFILE'
           plugins { id 'com.android.application' }
           android {
             namespace 'com.ketrika.v56'
@@ -41,8 +38,8 @@ jobs:
           dependencies {
             implementation 'androidx.appcompat:appcompat:1.6.1'
           }
-          EOF
-          cat > app/src/main/AndroidManifest.xml <<'EOF'
+          ENDOFFILE
+          cat > app/src/main/AndroidManifest.xml <<'ENDOFFILE'
           <?xml version="1.0" encoding="utf-8"?>
           <manifest xmlns:android="http://schemas.android.com/apk/res/android">
             <application android:label="Ketrika v56">
@@ -54,18 +51,23 @@ jobs:
               </activity>
             </application>
           </manifest>
-          EOF
-          cat > app/src/main/java/com/ketrika/v56/MainActivity.java <<'EOF'
+          ENDOFFILE
+          cat > app/src/main/java/com/ketrika/v56/MainActivity.java <<'ENDOFFILE'
           package com.ketrika.v56;
           import android.os.Bundle;
           import androidx.appcompat.app.AppCompatActivity;
           public class MainActivity extends AppCompatActivity {
             @Override protected void onCreate(Bundle b){ super.onCreate(b); }
           }
-          EOF
+          ENDOFFILE
+      - uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: 8.5
+          cache-disabled: true
       - name: Build
-        run: gradle :app:assembleDebug --stacktrace
+        run: gradle :app:assembleDebug --no-daemon --stacktrace
       - name: Upload
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: Ketrika-v56-APK

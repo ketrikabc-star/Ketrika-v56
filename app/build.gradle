@@ -1,6 +1,4 @@
-plugins {
-    id 'com.android.application'
-}
+plugins { id 'com.android.application' }
 android {
     namespace 'com.ketrika.v56'
     compileSdk 34

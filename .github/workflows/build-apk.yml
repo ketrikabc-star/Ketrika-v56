@@ -1,150 +1,83 @@
 name: Build APK
-
-on: [push, workflow_dispatch]
-
+on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Java
-        uses: actions/setup-java@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
         with:
-          distribution: temurin
+          distribution: 'temurin'
           java-version: '17'
-
-      - name: Setup Android
-        uses: android-actions/setup-android@v3
-
-      - name: Install Android SDK
+      - uses: android-actions/setup-android@v3
+      - name: Fix Project
         run: |
-          sdkmanager "platform-tools"
-          sdkmanager "platforms;android-34"
-          sdkmanager "build-tools;34.0.0"
-
-      - name: Create Android Project
-        run: |
-          rm -rf app
-          rm -f settings.gradle
-          rm -f gradle.properties
-
+          rm -rf app/src/main/Androidmanifest.xml
+          rm -f app/src/main/java/com/ketrika/v56/MainActivity.kt
           mkdir -p app/src/main/java/com/ketrika/v56
-
-          cat > settings.gradle <<'EOF'
-          pluginManagement {
-              repositories {
-                  google()
-                  mavenCentral()
-                  gradlePluginPortal()
-              }
-
-              plugins {
-                  id 'com.android.application' version '8.5.2'
-              }
-          }
-
-          dependencyResolutionManagement {
-              repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-
-              repositories {
-                  google()
-                  mavenCentral()
-              }
-          }
-
-          rootProject.name = 'Ketrika-v56'
-          include ':app'
-          EOF
-
-          cat > gradle.properties <<'EOF'
-          android.useAndroidX=true
-          android.nonTransitiveRClass=true
-          EOF
-
+          echo "include ':app'" > settings.gradle
+          echo "android.useAndroidX=true" > gradle.properties
+          echo "" > build.gradle
           cat > app/build.gradle <<'EOF'
-          plugins {
-              id 'com.android.application'
-          }
-
+          plugins { id 'com.android.application' }
           android {
-              namespace 'com.ketrika.v56'
-              compileSdk 34
-
-              defaultConfig {
-                  applicationId 'com.ketrika.v56'
-                  minSdk 21
-                  targetSdk 34
-                  versionCode 56
-                  versionName '56.0'
-              }
-
-              compileOptions {
-                  sourceCompatibility JavaVersion.VERSION_17
-                  targetCompatibility JavaVersion.VERSION_17
-              }
+            namespace 'com.ketrika.v56'
+            compileSdk 34
+            defaultConfig {
+              applicationId "com.ketrika.v56"
+              minSdk 21
+              targetSdk 34
+              versionCode 56
+              versionName "56.0"
+            }
+            compileOptions {
+              sourceCompatibility JavaVersion.VERSION_17
+              targetCompatibility JavaVersion.VERSION_17
+            }
           }
-
           dependencies {
-              implementation 'androidx.appcompat:appcompat:1.6.1'
+            implementation 'androidx.appcompat:appcompat:1.6.1'
           }
           EOF
-
           cat > app/src/main/AndroidManifest.xml <<'EOF'
           <?xml version="1.0" encoding="utf-8"?>
           <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-
-              <application
-                  android:allowBackup="true"
-                  android:label="Ketrika v56"
-                  android:supportsRtl="true">
-
-                  <activity
-                      android:name=".MainActivity"
-                      android:exported="true">
-
-                      <intent-filter>
-                          <action android:name="android.intent.action.MAIN" />
-                          <category android:name="android.intent.category.LAUNCHER" />
-                      </intent-filter>
-
-                  </activity>
-
-              </application>
-
+            <application android:label="Ketrika v56">
+              <activity android:name=".MainActivity" android:exported="true" android:theme="@android:style/Theme.Light">
+                <intent-filter>
+                  <action android:name="android.intent.action.MAIN" />
+                  <category android:name="android.intent.category.LAUNCHER" />
+                </intent-filter>
+              </activity>
+            </application>
           </manifest>
           EOF
-
           cat > app/src/main/java/com/ketrika/v56/MainActivity.java <<'EOF'
           package com.ketrika.v56;
-
+          import android.app.Activity;
           import android.os.Bundle;
-          import androidx.appcompat.app.AppCompatActivity;
-
-          public class MainActivity extends AppCompatActivity {
-
-              @Override
-              protected void onCreate(Bundle savedInstanceState) {
-                  super.onCreate(savedInstanceState);
-              }
+          import android.widget.TextView;
+          import android.view.Gravity;
+          public class MainActivity extends Activity {
+            @Override protected void onCreate(Bundle b){
+              super.onCreate(b);
+              TextView tv = new TextView(this);
+              tv.setText("KETRIKA v56\nMAITSO! SUCCESS!\nMandeha tsara!");
+              tv.setTextSize(24);
+              tv.setGravity(Gravity.CENTER);
+              tv.setPadding(50, 300, 50, 50);
+              setContentView(tv);
+            }
           }
           EOF
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
+      - uses: gradle/actions/setup-gradle@v3
         with:
-          gradle-version: '8.5'
+          gradle-version: 8.5
           cache-disabled: true
-
-      - name: Build APK
-        run: |
-          gradle :app:assembleDebug --no-daemon --stacktrace
-
-      - name: Upload APK
-        if: success()
+      - name: Build
+        run: gradle :app:assembleDebug --stacktrace
+      - name: Upload
         uses: actions/upload-artifact@v4
         with:
           name: Ketrika-v56-APK
-          path: app/build/outputs/apk/debug/app-debug.apk
+          path: app/build/outputs/apk/debug/*.apk

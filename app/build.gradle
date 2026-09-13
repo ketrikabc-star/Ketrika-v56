@@ -1,7 +1,6 @@
 plugins {
     id 'com.android.application'
 }
-
 android {
     namespace 'com.ketrika.v56'
     compileSdk 34
@@ -17,7 +16,6 @@ android {
         targetCompatibility JavaVersion.VERSION_17
     }
 }
-
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
 }
